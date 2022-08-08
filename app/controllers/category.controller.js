@@ -9,13 +9,14 @@ exports.create = (req, res) => {
       res.status(400).send({ message: "Content can not be empty!" });
       return;
     }
-    // Create a Tutorial
+    // Create a Category
     const category = new Category({
       name: req.body.name,
-      description: req.body.description
+      description: req.body.description,
+
      
     });
-    // Save Tutorial in the database
+    // Save Category in the database
     category
       .save(category)
       .then(data => {
@@ -24,11 +25,11 @@ exports.create = (req, res) => {
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while creating the Tutorial."
+            err.message || "Some error occurred while creating the Category."
         });
       });
   };
-  // Retrieve all Tutorials from the database.
+  // Retrieve all Categorys from the database.
 exports.findAll = (req, res) => {
   const name = req.query.name;
   var condition = name ? { name: { $regex: new RegExp(name), $options: "i" } } : {};
@@ -43,7 +44,7 @@ exports.findAll = (req, res) => {
       });
     });
 };
-// Find a single Tutorial with an id
+// Find a single Category with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
   Category.findById(id)
@@ -60,7 +61,7 @@ exports.findOne = (req, res) => {
 };
 
 
-// Update a Tutorial by the id in the request
+// Update a Category by the id in the request
 exports.update = (req, res) => {
   if (!req.body) {
     return res.status(400).send({
@@ -82,7 +83,7 @@ exports.update = (req, res) => {
       });
     });
 };
-// Delete a Tutorial with the specified id in the request
+// Delete a Category with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
   Category.findByIdAndRemove(id)
@@ -103,7 +104,7 @@ exports.delete = (req, res) => {
       });
     });
 };
-// Delete all Tutorials from the database.
+// Delete all Categorys from the database.
 exports.deleteAll = (req, res) => {
   
 };

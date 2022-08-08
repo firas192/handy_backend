@@ -1,3 +1,6 @@
+const Worker = require ("../models/worker.model");
+
+const Formulair =require ("../models/contactForm.model");
 
 exports.allAccess = (req, res) => {
   res.status(200).send("Public Content.");
@@ -12,6 +15,30 @@ exports.adminBoard = (req, res) => {
 };
 
 
+
+
+
+
+///find all worker list to apply by one of them 
+
+const findAll_Worker = (req, res) => {
+  const id = req.params._id;
+  var condition = id ? { name: { $regex: new RegExp(id), $options: "i" } } : {};
+  Worker.find(condition)
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Worker."
+      });
+    });
+};
+module.exports = {
+  findAll_Worker,
+
+};
 
 
 

@@ -8,7 +8,7 @@ var bcrypt = require("bcryptjs");
 
 
 exports.signup = (req, res) => {
-
+//////// save code verif for any user for send it to the email 
   let verifCode = Math.round(Math.random() * 1000000).toString();
 
   const user = new User({
@@ -37,7 +37,7 @@ exports.signup = (req, res) => {
             res.status(500).send({ message: err });
             return;
           }
-
+//////////send mail verificationEmailBody
           user.roles = roles.map(role => role._id);
 
           let verifyEmail = require("../mailling/config").sendVerifyEmail;

@@ -2,10 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const dbConfig = require("./app/config/db.config");
 const app = express();
-//require('./app/routes/auth.routes')(app);
-//require('./app/routes/user.routes')(app);
-//var bodyParser = require('body-parser');
-//var router = require('./app/routes/worker.routes');
+
 var corsOptions = {
   origin: "http://localhost:8081"
 };
@@ -30,6 +27,7 @@ db.mongoose
   .then(() => {
     console.log("Successfully connect to MongoDB.");
     initial();
+
   })
   .catch(err => {
     console.log("Cannot connect to the database!", err);
@@ -41,7 +39,7 @@ db.mongoose
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to Handy application." });
+  res.json({ message: "Welcome to Handy application." });  
 });
 
 
@@ -49,10 +47,32 @@ app.get("/", (req, res) => {
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/category.routes")(app);
+
 /// subcategory route
 
 const subcategory_route = require("./app/routes/subCategory.routes");
 app.use('/api',subcategory_route);
+
+//worker routes
+const worker_route= require("./app/routes/worker.routes");
+app.use('/api',worker_route);
+
+//report worker
+const report_route = require("./app/routes/report.routes");
+app.use('/api',report_route);
+
+//////contact Form route
+const contact_form= require("./app/routes/contactForm.routes")
+app.use('/api',contact_form);
+
+//// order routes
+const order_route =require("./app/routes/order.routes")
+app.use('/api',order_route);
+
+
+/////admin routers
+const adminRouter = require("./app/routes/admin.routes")
+app.use('/admin',adminRouter);
 
 
 // set port, listen for requests
@@ -61,7 +81,7 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
 
-
+//////// function for add admin and user to role collection 
 function initial() {
   Role.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
@@ -83,6 +103,17 @@ function initial() {
         }
         console.log("added 'admin' to roles collection");
       });
+
+      new Role({
+        name: "client"
+      }).save(err => {
+        if (err) {
+          console.log("error", err);
+        }
+        console.log("added 'client' to roles collection");
+      });
+      
+
     }
   });
 }

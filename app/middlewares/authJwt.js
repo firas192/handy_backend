@@ -25,7 +25,7 @@ const verifyToken = (req, res, next) => {
     next();
   });
 };
-
+///////////// verif in role model if user is admin
 isAdmin = (req, res, next) => {
   User.findById(req.userId).exec((err, user) => {
     if (err) {
@@ -57,9 +57,82 @@ isAdmin = (req, res, next) => {
   });
 };
 
+//////////verif in role model if user is client 
+isClient = (req, res, next) => {
+  User.findById(req.userId).exec((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+
+    Role.find(
+      {
+        _id: { $in: user.roles }
+      },
+      (err, roles) => {
+        if (err) {
+          res.status(500).send({ message: err });
+          return;
+        }
+
+        for (let i = 0; i < roles.length; i++) {
+          if (roles[i].name === "client" ) {
+            next();
+            return;
+          }
+        }
+
+        res.status(403).send({ message: "Require client Role!" });
+        return;
+      }
+    );
+  });
+};
+
+/////////////////
+
+
+isAdminClient = (req, res, next) => {
+  User.findById(req.userId).exec((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+
+    Role.find(
+      {
+        _id: { $in: user.roles }
+      },
+      (err, roles) => {
+        if (err) {
+          res.status(500).send({ message: err });
+          return;
+        }
+
+        for (let i = 0; i < roles.length; i++) {
+          if (roles[i].name === "client" || roles[i].name ==="admin") {
+            next();
+            return;
+          }
+        }
+
+        res.status(403).send({ message: "Require client Role!" });
+        return;
+      }
+    );
+  });
+};
+
+
+
+
+
+
 const authJwt = {
   verifyToken,
-  isAdmin
+  isAdmin,
+  isClient,
+  isAdminClient
   //isModerator
 };
 module.exports = authJwt;

@@ -5,7 +5,7 @@ const mg = mailgun.client({
     username: 'api',
 	key: process.env.MAILGUN_KEY,
 })
-
+//////// confiration for send mail verif to boit emailling client
 module.exports.sendVerifyEmail = (email, body) => {
     return mg.messages.create(process.env.MAILGUN_DOMAIN, {
         from: `Handy <postman@${process.env.MAILGUN_DOMAIN}>`,

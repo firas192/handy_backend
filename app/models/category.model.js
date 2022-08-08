@@ -8,8 +8,10 @@ module.exports = mongoose => {
           required: true,
         },
         description: String,
+        subCategories : [String]
        
       },
+      
       { timestamps: true }
     )
   );
